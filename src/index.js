@@ -5,6 +5,7 @@ import Node from "./components/Node/Node";
 import Comment from "./components/Comment/Comment";
 import Toaster from "./components/Toaster/Toaster";
 import Connections from "./components/Connections/Connections";
+
 import {
   NodeTypesContext,
   PortTypesContext,
@@ -43,6 +44,7 @@ export let NodeEditor = (
     onChange,
     onCommentsChange,
     initialScale,
+    initialPosition,
     spaceToPan = false,
     hideComments = false,
     disableComments = false,
@@ -50,6 +52,7 @@ export let NodeEditor = (
     disablePan = false,
     circularBehavior,
     renderNodeHeader,
+    customStageItems,
     debug
   },
   ref
@@ -81,7 +84,7 @@ export let NodeEditor = (
   ] = React.useState(true);
   const [stageState, dispatchStageState] = React.useReducer(stageReducer, {
     scale: typeof initialScale === "number" ? clamp(initialScale, 0.1, 7) : 1,
-    translate: { x: 0, y: 0 }
+    translate: initialPosition || { x: 0, y: 0 }
   });
 
   const recalculateConnections = React.useCallback(() => {
@@ -111,6 +114,9 @@ export let NodeEditor = (
     },
     getComments: () => {
       return comments;
+    },
+    getStage: () => {
+      return stageState;
     }
   }));
 
@@ -185,6 +191,12 @@ export let NodeEditor = (
                                 >
                                   Log Comments
                                 </button>
+                                <button
+                                  className={styles.debugButton}
+                                  onClick={() => console.log(stageState)}
+                                >
+                                  Log State
+                                </button>
                               </div>
                             )}
                             <Toaster
@@ -215,6 +227,7 @@ export let NodeEditor = (
                           />
                         ))}
                         <Connections nodes={nodes} editorId={editorId} />
+                        {customStageItems}
                         <div
                           className={styles.dragWrapper}
                           id={`${DRAG_CONNECTION_ID}${editorId}`}
