@@ -48,6 +48,7 @@ const IoPorts = ({
   outputs = [],
   connections,
   inputData,
+  readOnly,
   updateNodeConnections
 }) => {
   const inputTypes = React.useContext(PortTypesContext);
@@ -70,6 +71,7 @@ const IoPorts = ({
               nodeId={nodeId}
               inputData={inputData}
               key={input.name}
+              readOnly={readOnly}
             />
           ))}
         </div>
@@ -85,6 +87,7 @@ const IoPorts = ({
               inputData={inputData}
               portOnRight
               key={output.name}
+              readOnly={readOnly}
             />
           ))}
         </div>
@@ -101,6 +104,7 @@ const Input = ({
   name,
   nodeId,
   data,
+  readOnly,
   controls: localControls,
   inputTypes,
   noControls,
@@ -138,6 +142,7 @@ const Input = ({
           color={color}
           name={name}
           nodeId={nodeId}
+          readOnly={readOnly}
           isInput
           triggerRecalculation={triggerRecalculation}
         />
@@ -178,6 +183,7 @@ const Output = ({
   nodeId,
   type,
   inputTypes,
+  readOnly,
   triggerRecalculation
 }) => {
   const { label: defaultLabel, color } = inputTypes[type] || {};
@@ -198,6 +204,7 @@ const Output = ({
         name={name}
         color={color}
         nodeId={nodeId}
+        readOnly={readOnly}
         triggerRecalculation={triggerRecalculation}
       />
     </div>
@@ -210,6 +217,7 @@ const Port = ({
   type,
   isInput,
   nodeId,
+  readOnly,
   triggerRecalculation
 }) => {
   const nodesDispatch = React.useContext(NodeDispatchContext);
@@ -331,6 +339,11 @@ const Port = ({
   const handleDragStart = e => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (readOnly) {
+      return
+    }
+
     const startPort = port.current.getBoundingClientRect();
     const stage = document
       .getElementById(stageId)

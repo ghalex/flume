@@ -50,6 +50,7 @@ export let NodeEditor = (
     disableComments = false,
     disableZoom = false,
     disablePan = false,
+    readOnly = false,
     circularBehavior,
     renderNodeHeader,
     customStageItems,
@@ -167,6 +168,7 @@ export let NodeEditor = (
                         disableComments={disableComments || hideComments}
                         stageRef={stage}
                         numNodes={Object.keys(nodes).length}
+                        readOnly={readOnly}
                         outerStageChildren={
                           <React.Fragment>
                             {debug && (
@@ -223,6 +225,7 @@ export let NodeEditor = (
                             onDragEnd={triggerRecalculation}
                             onDragStart={recalculateStageRect}
                             renderNodeHeader={renderNodeHeader}
+                            readOnly={readOnly}
                             key={node.id}
                           />
                         ))}

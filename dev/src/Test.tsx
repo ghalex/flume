@@ -23,6 +23,7 @@ const TestEditor = () => {
     <div className="wrapper" style={{width: 800, height: 600}}>
       <NodeEditor
         customStageItems={<PlusIcon style={{ left: 0}} fill="rgba(0, 0, 0, 0.2)" />}
+        readOnly
         portTypes={{
           number: {
             label: "Number",

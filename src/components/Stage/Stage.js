@@ -16,6 +16,7 @@ const Stage = ({
   children,
   outerStageChildren,
   numNodes,
+  readOnly,
   stageRef,
   spaceToPan,
   dispatchComments,
@@ -123,6 +124,11 @@ const Stage = ({
 
   const handleContextMenu = e => {
     e.preventDefault();
+
+    if (readOnly) {
+      return false;
+    }
+
     setMenuCoordinates({ x: e.clientX, y: e.clientY });
     setMenuOpen(true);
     return false;

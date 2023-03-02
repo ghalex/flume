@@ -17,6 +17,7 @@ const Node = ({
   width,
   x,
   y,
+  readOnly = false,
   stageRect,
   connections,
   type,
@@ -131,6 +132,11 @@ const Node = ({
   const handleContextMenu = e => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (readOnly) {
+      return false
+    }
+
     setMenuCoordinates({ x: e.clientX, y: e.clientY });
     setMenuOpen(true);
     return false;
@@ -173,6 +179,7 @@ const Node = ({
       onContextMenu={handleContextMenu}
       stageState={stageState}
       stageRect={stageRect}
+      disabled={readOnly}
     >
       {renderNodeHeader ? (
         renderNodeHeader(NodeHeader, currentNodeType, {
@@ -190,6 +197,7 @@ const Node = ({
         connections={connections}
         updateNodeConnections={updateNodeConnections}
         inputData={inputData}
+        readOnly={readOnly}
       />
       {menuOpen ? (
         <Portal>
