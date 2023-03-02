@@ -98,14 +98,15 @@ export let NodeEditor = (
   };
 
   React.useLayoutEffect(() => {
-    if (shouldRecalculateConnections) {
-      recalculateConnections();
-      setShouldRecalculateConnections(false);
-    }
-  }, [shouldRecalculateConnections, recalculateConnections]);
+    recalculateConnections();
+    // if (shouldRecalculateConnections) {
+    //   setShouldRecalculateConnections(false);
+    // }
+  }, [recalculateConnections]);
 
   const triggerRecalculation = () => {
-    setShouldRecalculateConnections(true);
+    // setShouldRecalculateConnections(true);
+    recalculateConnections();
   };
 
   React.useImperativeHandle(ref, () => ({
@@ -137,7 +138,7 @@ export let NodeEditor = (
   }, [comments, previousComments, onCommentsChange]);
 
   React.useEffect(() => {
-    if(sideEffectToasts){
+    if (sideEffectToasts) {
       dispatchToasts(sideEffectToasts)
       setSideEffectToasts(null)
     }
@@ -248,4 +249,4 @@ NodeEditor = React.forwardRef(NodeEditor);
 export { FlumeConfig, Controls, Colors } from "./typeBuilders";
 export { RootEngine } from "./RootEngine";
 export const useRootEngine = (nodes, engine, context, options = {}) =>
-  Object.keys(nodes).length ? engine.resolveRootNode(nodes, {...options, context }) : {};
+  Object.keys(nodes).length ? engine.resolveRootNode(nodes, { ...options, context }) : {};
