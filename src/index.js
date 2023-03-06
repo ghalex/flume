@@ -43,6 +43,7 @@ export let NodeEditor = (
     context = defaultContext,
     onChange,
     onCommentsChange,
+    onHelp,
     initialScale,
     initialPosition,
     spaceToPan = false,
@@ -88,6 +89,8 @@ export let NodeEditor = (
     translate: initialPosition || { x: 0, y: 0 }
   });
 
+  const initialRecalculateConnectionsDoneRef = React.useRef(false)
+
   const recalculateConnections = React.useCallback(() => {
     createConnections(nodes, stageState, editorId);
   }, [nodes, editorId, stageState]);
@@ -99,7 +102,10 @@ export let NodeEditor = (
   };
 
   React.useLayoutEffect(() => {
-    recalculateConnections();
+    if (!initialRecalculateConnectionsDoneRef.current) {
+      initialRecalculateConnectionsDoneRef.current = true
+      recalculateConnections();
+    }
     // if (shouldRecalculateConnections) {
     //   setShouldRecalculateConnections(false);
     // }
@@ -225,6 +231,7 @@ export let NodeEditor = (
                             stageRect={stage}
                             onDragEnd={triggerRecalculation}
                             onDragStart={recalculateStageRect}
+                            onHelp={onHelp}
                             renderNodeHeader={renderNodeHeader}
                             readOnly={readOnly}
                             key={node.id}

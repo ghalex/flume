@@ -23,6 +23,7 @@ const Node = ({
   type,
   inputData,
   onDragStart,
+  onHelp,
   renderNodeHeader
 }) => {
   const cache = React.useContext(CacheContext);
@@ -72,32 +73,32 @@ const Node = ({
           x:
             byScale(
               toRect.x -
-                stageRect.current.x +
-                portHalf -
-                stageRect.current.width / 2
+              stageRect.current.x +
+              portHalf -
+              stageRect.current.width / 2
             ) + byScale(stageState.translate.x),
           y:
             byScale(
               toRect.y -
-                stageRect.current.y +
-                portHalf -
-                stageRect.current.height / 2
+              stageRect.current.y +
+              portHalf -
+              stageRect.current.height / 2
             ) + byScale(stageState.translate.y)
         };
         const to = {
           x:
             byScale(
               fromRect.x -
-                stageRect.current.x +
-                portHalf -
-                stageRect.current.width / 2
+              stageRect.current.x +
+              portHalf -
+              stageRect.current.width / 2
             ) + byScale(stageState.translate.x),
           y:
             byScale(
               fromRect.y -
-                stageRect.current.y +
-                portHalf -
-                stageRect.current.height / 2
+              stageRect.current.y +
+              portHalf -
+              stageRect.current.height / 2
             ) + byScale(stageState.translate.y)
         };
         cnx.setAttribute("d", calculateCurve(from, to));
@@ -158,6 +159,13 @@ const Node = ({
       case "deleteNode":
         deleteNode();
         break;
+      case "helpNode":
+        onHelp && onHelp({
+          id,
+          type,
+          inputData
+        })
+        break;
       default:
         return;
     }
@@ -188,7 +196,9 @@ const Node = ({
           deleteNode
         })
       ) : (
+
         <NodeHeader>{label}</NodeHeader>
+
       )}
       <IoPorts
         nodeId={id}
@@ -207,12 +217,17 @@ const Node = ({
             options={[
               ...(deletable !== false
                 ? [
-                    {
-                      label: "Delete Node",
-                      value: "deleteNode",
-                      description: "Deletes a node and all of its connections."
-                    }
-                  ]
+                  {
+                    label: "Delete Node",
+                    value: "deleteNode",
+                    description: "Deletes a node and all of its connections."
+                  },
+                  {
+                    label: "Get Help",
+                    value: "helpNode",
+                    description: "Get documentation for the node"
+                  }
+                ]
                 : [])
             ]}
             onRequestClose={closeContextMenu}
